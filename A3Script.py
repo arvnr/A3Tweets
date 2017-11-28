@@ -24,69 +24,44 @@ def get_profile(screen_name):
 
 # OBJECTIVE ONE: GET TWITTER USER ID
 s = get_profile("CitronResearch")
-print "Name:" +s.name
-print "id:" +s.id_str
-
+print "Name: " + s.name
+print "id: " + s.id_str
 def get_tweets(screen_name):
-    try:
-        tweets = api.user_timeline(screen_name = screen_name,count = 20)
-    except:
-        tweets = "broken"
-    return tweets
-# OBJECTIVE TWO: GET RETWEETS
-retweetlist = []
-t = get_tweets("CitronResearch")
-for tweet in t:
-    retweetlist.append(tweet.retweet_count)
-
-for tweet in t:
-    if tweet.retweet_count == max(retweetlist):
-    retweettext = tweet.text
-print "Citron Retweets: \"" + retweettext + " \" with a retweet count of " +str(max(list))"
-# OBJECTIVE THREE: SHOPIFY TWEETS THAT MENTION CITRON
-def get_tweets(screen_name):
-
     alltweets = []
     try:
-        tweets = api.user_timeline(screen_name, count=20)
+        #https://developer.twitter.com/en/docs/tweets/timelines/overview describes user_timeline
+        tweets = api.user_timeline(screen_name, count=3200)
         print "tweets"
         alltweets.extend(tweets)
         oldest = alltweets[-1].id - 1
         print oldest
         print len(tweets)
         while len(tweets) > 0:
-            tweets = api.user_timeline(screen_name, count=20, max_id=oldest)
+            tweets = api.user_timeline(screen_name, count=3200, max_id=oldest)
             alltweets.extend(tweets)
-            oldest = alltweets[-1].id -1
-            print "..%s Retrieved" %(len)alltweets))
+            oldest = alltweets[-1].id - 1
+            print "...Fetching Tweets" % (len(alltweets))
     except:
         user_profile = "broken"
     return alltweets
-# GETTING TWEETS FROM TOBI
-t1 = get_tweets("Tobi")
+       
+list1 = []
+t = get_tweets("CitronResearch")
+for tweet in t:
+    list1.append(tweet.retweet_count)
 
-with open ('Tobitweets.csv', 'wb') as outfile:
+for tweet in t:
+    if tweet.retweet_count == max(list1):
+        text1 = tweet.text
+
+with open ('A3Export.csv', 'wb') as outfile:
     writer = csv.writer(outfile)
     writer.writerow(["id","user","created_at","text"])
-    for tweets in t1:
-        if "troll, citron" in tweet.text;
-            writer.writerow([tweet.user.id_str,tweet.user.screen_name,tweet.created_at,tweet.text.encode('unicode-escape')])
-# GETTING TWEETS FROM SHOPIFY
-t2 = get_tweets("Shopify")
-
-with open ('Shopifytweets.csv', 'wb') as outfile:
-    writer = csv.writer(outfile)
-    writer.writerow(["id","user","created_at","text"])
-    for tweets in t2:
-        if "citron, CitronResearch" in tweet.text;
-            writer.writerow([tweet.user.id_str,tweet.user.screen_name,tweet.created_at,tweet.text.encode('unicode-escape')])
-
-# OBJECTIVE FOUR: CITRON TWEETS THAT MENTION FTC
-t3 = get_tweets("CitronResearch")
-
-with open ('FTCtweets.csv', 'wb') as outfile:
-    writer = csv.writer(outfile)
-    writer.writerow(["id","user","created_at","text"])
-    for tweets in t3:
-        if "FTC" in tweet.text;
-            writer.writerow([tweet.user.id_str,tweet.user.screen_name,tweet.created_at,tweet.text.encode('unicode-escape')])
+    for tweet in t:
+        if "FTC" in tweet.text:
+            writer.writerow([tweet.id_str,tweet.user.screen_name,tweet.created_at,tweet.text.encode('unicode-escape')])
+    t3 = get_tweets("Shopify")
+    for tweet in t3:
+        if "citron" in tweet.text:
+            writer.writerow([tweet.id_str,tweet.user.screen_name,tweet.created_at,tweet.text.encode('unicode-escape')])
+print "Most Retweeted Tweet by Citron: \"" + text1 + " \" count of " +str(max(list1))
